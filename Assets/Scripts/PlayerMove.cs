@@ -3,18 +3,26 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
 
+    //speed for player WASD movement
     public float speed;
+
+    //reference to my player's animator component
+    Animator myAnim;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        //set my reference to my animator component
+        myAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        //current x,y,z position of player in the scene
         Vector3 currentPos = transform.position;
+        //if i press WASD, change the current position values
+        //multiplying by deltaTime makes my movement frame independent
         if (Input.GetKey(KeyCode.W))
         {
             currentPos.y += speed * Time.deltaTime;
@@ -31,6 +39,19 @@ public class PlayerMove : MonoBehaviour
         {
             currentPos.x += speed * Time.deltaTime;
         }
-        transform.position = currentPos;
+        //if my object's position is different from my currentPos variable
+        //(which changes based on input)
+        if (transform.position != currentPos)
+        {
+            //set my position to the new currentPos
+            transform.position = currentPos;
+            //trigger my walking animation
+            myAnim.SetBool("isWalking", true);
+        }
+        else
+        {
+            //turn off my walking animation
+            myAnim.SetBool("isWalking", false);
+        }
     }
 }
